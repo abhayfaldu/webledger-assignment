@@ -1,6 +1,8 @@
 const { User } = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { validateMongodbId } = require("../utils/validateMongoDbId");
+const { generateRefreshToken } = require("../config/refreshToken");
+const { generateJWTToken } = require("../config/jwtToken");
 
 // User Register Controller
 const handleRegister = asyncHandler(async (req, res) => {
@@ -26,10 +28,10 @@ const handleLogin = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 	const userByEmail = await User.findOne({ email });
 	try {
-		if (userByEmail && (await userByEmail.isPasswordMatch(password))) {
+		if (userByEmail && (await userByEmail.isPasswordMatched(password))) {
 			// Generate and assign refreshToken
 			const id = userByEmail?._id;
-			const refreshToken = userByEmail.generateRefreshToken(id);
+			const refreshToken = await generateRefreshToken(id);
 			await User.findByIdAndUpdate(id, { refreshToken }, { new: true });
 
 			// Store refreshToken in cookies
@@ -42,7 +44,7 @@ const handleLogin = asyncHandler(async (req, res) => {
 				lastName: userByEmail?.lastName,
 				email: userByEmail?.email,
 				mobile: userByEmail?.mobile,
-				token: generateToken(userByEmail?._id),
+				token: generateJWTToken(userByEmail?._id),
 			});
 		} else {
 			res.status(401).send({ message: "User not found, Please Register." });

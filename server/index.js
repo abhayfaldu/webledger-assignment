@@ -13,11 +13,7 @@ const app = express();
 connectMongoDB();
 
 // Middlewares & Plugins
-app.use(
-	cors({
-		origin: ["http://localhost:3000", "http://localhost:4001"],
-	})
-);
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
