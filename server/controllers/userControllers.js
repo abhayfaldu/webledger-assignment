@@ -45,4 +45,7 @@ const handleLogin = async (req, res) => {
 	}
 };
 
-module.exports = { handleRegister, handleLogin };
+const handleGetAllSavedRecipes = asyncHandler(async (req, res) => {
+});
+
+module.exports = { handleRegister, handleLogin, handleGetAllSavedRecipes };
