@@ -1,9 +1,11 @@
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
+const { validateMongodbId } = require("../utils/validateMongoDbId");
 
 // Save recipe controller
 const handleSaveRecipe = asyncHandler(async (req, res) => {
 	const { userId } = req.user;
+	validateMongodbId(userId);
 	const { recipeId } = req.body;
 
 	try {
@@ -28,7 +30,6 @@ const handleSaveRecipe = asyncHandler(async (req, res) => {
 			res.json(user);
 		}
 	} catch (error) {
-		res.status(401).send({ message: error.message });
 		throw new Error(error);
 	}
 });
