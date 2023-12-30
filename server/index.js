@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const userRoute = require("./routes/userRoute").router;
+const recipeRoute = require("./routes/recipeRoute").router;
 const { connectMongoDB } = require("./config/dbConnect");
 
 const app = express();
@@ -12,17 +13,14 @@ const app = express();
 connectMongoDB();
 
 // Middlewares & Plugins
-app.use(
-	cors({
-		origin: ["http://localhost:3000", "http://localhost:4001"],
-	})
-);
+app.use(cors("http://localhost:3000/*"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Routes
 app.use("/api/user", userRoute);
+app.use("/api/recipe", recipeRoute);
 
 const PORT = process.env.PORT || 4001;
 
