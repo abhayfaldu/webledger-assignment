@@ -11,7 +11,7 @@ const handleSaveRecipe = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(_id);
 		const alreadySaved = user.savedRecipes.find(
-			(id) => id.toString() === recipeId
+			(id) => id.toString() === recipeId.toString()
 		);
 
 		if (alreadySaved) {

@@ -9,6 +9,6 @@ const { authMiddleware } = require("../middlewares/authMiddleware");
 
 router.post("/register", handleRegister);
 router.post("/login", handleLogin);
-router.get("/wishlist", authMiddleware, handleGetAllSavedRecipes);
+router.get("/saved-recipes", authMiddleware, handleGetAllSavedRecipes);
 
 module.exports = { router };

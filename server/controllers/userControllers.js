@@ -16,7 +16,8 @@ const handleRegister = asyncHandler(async (req, res) => {
 				.status(200)
 				.send({ message: "User registered successfully", user: newUser });
 		} else {
-			res.status(409).send({ message: "User already exits, Please Login." });
+			res.status(409);
+			throw new Error("User already exits, Please Login.");
 		}
 	} catch (error) {
 		throw new Error(error);
@@ -61,7 +62,7 @@ const handleGetAllSavedRecipes = asyncHandler(async (req, res) => {
 
 	try {
 		const findUser = await User.findById(_id);
-		res.json(findUser);
+		res.json(findUser.savedRecipes);
 	} catch (error) {
 		throw new Error(error);
 	}
