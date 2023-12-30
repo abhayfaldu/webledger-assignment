@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useFormik } from "formik";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
@@ -20,7 +20,6 @@ const signUpSchema = yup.object({
 
 const Signup = () => {
 	const navigate = useNavigate();
-	const [user, setUser] = useState();
 
 	const formik = useFormik({
 		initialValues: {
@@ -31,28 +30,27 @@ const Signup = () => {
 			mobile: "",
 		},
 		validationSchema: signUpSchema,
-		onSubmit: (values) => {
+		onSubmit: async (values) => {
 			try {
-				fetch(`${base_url}user/register`, {
-					method: "POST",
+				const response = await axios.post(`${base_url}/user/register`, values, {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(values),
-				})
-					.then((res) => res.json())
-					.then((data) => {
-						setUser(data);
-						if (data) {
-							toast.info("User Register Successfully");
-							localStorage.setItem("user", JSON.stringify(data));
-							// navigate("/");
-						} else {
-							const errorData = data.json();
-							toast.error(errorData);
-						}
-					});
+				});
+
+				const data = response.data;
+
+				if (data) {
+					toast.info("User Register Successfully");
+					localStorage.setItem("user", JSON.stringify(data));
+					navigate("/");
+				} else {
+					const errorData = await data.json(); // Assuming data is a response object
+					toast.error(errorData);
+				}
 			} catch (error) {
+				if (error.response.status === 409)
+					toast.error("User already exits with this email.");
 				console.error("Error during registration:", error);
 			}
 		},

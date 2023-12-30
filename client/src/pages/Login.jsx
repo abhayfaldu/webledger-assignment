@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useFormik } from "formik";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
@@ -17,7 +17,6 @@ const loginSchema = yup.object({
 
 const Login = () => {
 	const navigate = useNavigate();
-	const [user, setUser] = useState();
 
 	const formik = useFormik({
 		initialValues: {
@@ -25,29 +24,27 @@ const Login = () => {
 			password: "",
 		},
 		validationSchema: loginSchema,
-		onSubmit: (values) => {
+		onSubmit: async (values) => {
 			try {
-				fetch(`${base_url}user/login`, {
-					method: "POST",
+				const response = await axios.post(`${base_url}/user/login`, values, {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(values),
-				})
-					.then((res) => res.json())
-					.then((data) => {
-						setUser(data);
-						if (data) {
-							toast.info("User login Successfully");
-							localStorage.setItem("user", JSON.stringify(data));
-							navigate("/");
-						} else {
-							const errorData = data.json();
-							toast.error(errorData);
-						}
-					});
+				});
+
+				const data = response.data;
+
+				if (data) {
+					toast.info("User login Successfully");
+					localStorage.setItem("user", JSON.stringify(data));
+					localStorage.setItem("token", data.token);
+					navigate("/");
+				} else {
+					const errorData = await response.json(); // Assuming response is a response object
+					toast.error(errorData);
+				}
 			} catch (error) {
-				console.error("Error during registration:", error);
+				console.error("Error during login:", error);
 			}
 		},
 	});

@@ -5,10 +5,10 @@ import PageHeader from "../components/PageHeader";
 const RecipesDetails = () => {
 	const { id } = useParams();
 	const [recipes, setRecipes] = useState([]);
-	console.log(recipes);
+
 	useEffect(() => {
 		fetch(
-			`https://api.spoonacular.com/recipes/${id}/information?apiKey=109372c243a54659902b861f188df5db`
+			`https://api.spoonacular.com/recipes/${id}/information?apiKey=cde305f3c7994b328b42e09db5b96881`
 		)
 			.then((res) => res.json())
 			.then((data) => setRecipes(data));

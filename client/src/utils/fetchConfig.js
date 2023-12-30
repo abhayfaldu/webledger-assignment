@@ -1,11 +1,10 @@
-export const base_url = "http://localhost:3001/api/";
+export const base_url = "http://localhost:3001/api";
 
-// const token = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("token");
 
-// export const config = {
-// 	headers: {
-// 		Authorization: `Bearer ${token.token !== null ? token.token : ""}`,
-// 		Accept: "application/json",
-// 	},
-// };
-// 
+export const config = {
+	headers: {
+		Authorization: `Bearer ${token || ""}`,
+		Accept: "application/json",
+	},
+};

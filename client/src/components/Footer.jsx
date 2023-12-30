@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
 	return (
-		<div className="mx-auto xl:px-24 px-4 mt-5 bg-indigo-100">
+		<div className="mx-auto xl:px-24 px-4 mt-5 bg-indigo-100 ">
 			<div className="container max-w-screen-2xl mx-auto py-5 flex flex-col flex-1 gap-4">
 				<div className="flex items-center">
 					<RiRecordCircleFill className="text-5xl" />
